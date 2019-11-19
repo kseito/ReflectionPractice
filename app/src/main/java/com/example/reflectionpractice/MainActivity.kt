@@ -1,9 +1,9 @@
 package com.example.reflectionpractice
 
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -15,17 +15,31 @@ class MainActivity : AppCompatActivity() {
 
         val user = User(1, "kseito", "I love Splatoon!")
         val cls = User::class
-        cls.memberProperties.forEach {
-            it.isAccessible = true
-            println("${it.name} value is ${it.get(user)}")
-        }
+
+        //private method reference
+        cls.memberFunctions
+            .filter { it.name == "getFullInfo" }
+            .forEach {
+                it.isAccessible = true
+                println("This function name is ${it.name}. value is ${it.call(user)}")
+            }
+
+        //private property reference
+        cls.memberProperties
+            .filter { it.name == "description" }
+            .forEach {
+                it.isAccessible = true
+                println("${it.name} value is ${it.get(user)}")
+            }
 
 
         val textView = TextView(this)
         val cls2 = TextView::class
-        cls2.memberProperties.filter { it.name == "mMaximum" }.forEach {
-            it.isAccessible = true
-            println("${it.name} value is ${it.get(textView)}")
-        }
+        cls2.memberProperties
+            .filter { it.name == "mMaximum" }
+            .forEach {
+                it.isAccessible = true
+                println("${it.name} value is ${it.get(textView)}")
+            }
     }
 }
