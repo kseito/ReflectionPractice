@@ -3,6 +3,7 @@ package com.example.reflectionpractice
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import org.w3c.dom.Text
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -33,10 +34,10 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-        val textView = TextView(this)
+        val textView = findViewById<TextView>(R.id.text_view)
         val cls2 = TextView::class
         cls2.memberProperties
-            .filter { it.name == "mMaximum" }
+            .filter { it.name == "mText" }
             .forEach {
                 it.isAccessible = true
                 println("${it.name} value is ${it.get(textView)}")
